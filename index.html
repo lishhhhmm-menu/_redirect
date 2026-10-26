@@ -7,19 +7,27 @@
 	<body>
 		<div id="content"></div>
 		<script>
-			const routes = {
-				"1": "avli"
-			};
-			
 			const params = new URLSearchParams(window.location.search);
 			const slug = (params.get("redirect") || "").trim();
-			const destination = routes[slug];
 			
-			if (destination) {
-				window.location.replace(`https://${destination}.menu.web-presence.gr`);
-			} else {
-				document.getElementById("content").textContent = 'Invalid redirect for parameter "' + slug + '"';
-			}
+			fetch('routes.json?t=' + Date.now(), { cache: 'no-store' })
+				.then(response => {
+					if (!response.ok) throw new Error('Network error');
+					return response.json();
+				})
+				.then(routes => {
+					const destination = routes[slug];
+					
+					if (destination) {
+						window.location.replace(`https://${destination}.menu.web-presence.gr`);
+					} else {
+						document.getElementById("content").textContent = 'Invalid redirect for "' + slug + '"';
+					}
+				})
+				.catch(() => {
+					document.getElementById("content").textContent = 'Invalid redirect for "' + slug + '"';
+				});
 		</script>
+	
 	</body>
 </html>
