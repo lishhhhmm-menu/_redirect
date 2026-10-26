@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Redirecting...</title>
+	</head>
+	<body>
+		<div id="content"></div>
+		<script>
+			const routes = {
+				"1": "ritrovo"
+			};
+			
+			const params = new URLSearchParams(window.location.search);
+			const slug = (params.get("redirect") || "").trim();
+			const destination = routes[slug];
+			
+			if (destination) {
+				window.location.replace(`https://${destination}.menu.web-presence.gr`);
+			} else {
+				document.getElementById("content").textContent = 'Invalid redirect for parameter "' + slug + '"';
+			}
+		</script>
+	</body>
+</html>
